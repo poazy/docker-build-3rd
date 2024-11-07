@@ -10,7 +10,7 @@ sudo DOCKER_BUILDKIT=1 docker build -t poazy/sentinel-dashboard:1.8.7 \
   --build-arg FROM_IMAGE="openjdk:8-jre-alpine" \
   --build-arg APP_NAME="sentinel-dashboard-1.8.7" \
   --build-arg CURR_TIME="$(date +'%Y%m%d%H%M%S')" \
-  --no-cache --platform linux/arm64,linux/amd64 . --push
+  --no-cache --platform linux/arm64,linux/amd64 .
 ```
 
 * 03运行镜像
