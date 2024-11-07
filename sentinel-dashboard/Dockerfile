@@ -5,6 +5,8 @@ RUN rm -rf /etc/localtime
 RUN ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
 ARG APP_NAME="sentinel-dashboard"
+ARG CURR_TIME="00000000000000"
+ENV CURR_TIME=$CURR_TIME
 ENV APP_NAME=$APP_NAME
 ENV JAVA_OPTS=""
 
@@ -18,7 +20,6 @@ WORKDIR /poazy/app/${APP_NAME}
 VOLUME /poazy/app/${APP_NAME}
 VOLUME /poazy/logs/${APP_NAME}
 
-RUN export CURR_TIME=$(date +%Y%m%d%H%M%S)
 RUN touch $APP_NAME-v$CURR_TIME
 ENV APP_VERSION=$CURR_TIME
 
