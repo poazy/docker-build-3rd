@@ -1,7 +1,8 @@
 * 01多平台架构支持
 ```shell
-# 需要在daemon.json中配置"registry-mirrors": ["https://docker.m.daocloud.io"] 或 科学上网
 sudo docker buildx create --use --name m1_builder
+#ERROR: error getting credentials - err: exit status 1, out: ``需要将config.json中的"credsStore": "desktop"删除
+#需要在daemon.json中配置"registry-mirrors": ["https://docker.m.daocloud.io"] 或 科学上网
 sudo docker buildx inspect --bootstrap
 ```
 * 02构建镜像
@@ -25,16 +26,17 @@ docker run -d --restart=always --name sentinel-dashboard-187 \
 ```shell
 # 需要科学上网
 # 如果登录login报错Error saving credentials需要将config.json中的"credsStore": "desktop"删除
-sudo docker login -u poazy -p ***
+sudo docker login -u poazy
 # 需要科学上网
 docker push poazy/sentinel-dashboard:1.8.7
 ```
 
 * 04推送镜像到Harbor私服
 ```shell
-docker tag 26a5f68ff30d local.dsxx.com:11667/dsxx/sentinel-dashboard:1.8.7
+docker tag b61d921bdd0b local.dsxx.com:11667/dsxx/sentinel-dashboard:1.8.7
+# Error response from daemon: Get "https://local.dsmm.com:1667/v2/": http: server gave HTTP response to HTTPS client
 # 需要在daemon.json中配置"insecure-registries": ["http://local.dsxx.com:11667"]
-sudo docker login http://local.dsxx.com:11667 -u admin -p ***
+sudo docker login http://local.dsxx.com:11667 -u admin
 docker push local.dsmm.com:1667/dsmm/sentinel-dashboard:1.8.7
 ```
 
