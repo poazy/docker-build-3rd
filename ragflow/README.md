@@ -10,7 +10,7 @@ git switch --detach v0.13.0
 
 * 02安装与下载依赖
 ```shell
-#要提前安装好python哦!
+#需要科学上网,要提前安装好python哦!
 pip3 install huggingface-hub nltk
 #需要科学上网，下载依赖文件这个过程会很久
 python3 download_deps.py
@@ -19,34 +19,36 @@ python3 download_deps.py
 * 03构建镜像（构建arm64架构，与【构建多平台架构】二选一方式构建）
 ```shell
 #需要在daemon.json中配置"registry-mirrors": ["https://docker.m.daocloud.io"] 或 科学上网
-sudo docker build --build-arg ARCH="arm64" -f Dockerfile -t local.dsmm.com:1667/dsmm/ragflow:0.13.0 .
+sudo docker build --build-arg ARCH="arm64" -f Dockerfile -t local.dsxx.com:1667/dsxx/ragflow:0.13.0 .
 ```
 
-* 03构建镜像（构建多平台架构，与【构建arm64架构】二选一方式构建）
+* 03【失败不行】构建镜像（构建多平台架构，与【构建arm64架构】二选一方式构建）
 ```shell
 #构建多平台架构
+#ERROR: error getting credentials - err: exit status 1, out: ``需要将config.json中的"credsStore": "desktop"删除
 #需要在daemon.json中配置"registry-mirrors": ["https://docker.m.daocloud.io"] 或 科学上网
 sudo docker buildx create --use --name m1_builder
 sudo docker buildx inspect --bootstrap
 #
 #先Dockerfile修改下dpkg -i /root/libssl1.1_1.1.1f-1ubuntu2_amd64.deb; \的fi后添加 || true避免在arm64时执行异常！
 sudo DOCKER_BUILDKIT=1 docker build -f Dockerfile \
-  -t local.dsmm.com:1667/dsmm/ragflow:0.13.0 \
-  --no-cache --platform linux/arm64,linux/amd64 .
+  -t local.dsxx.com:1667/dsxx/ragflow:0.13.0 \
+  --platform linux/arm64,linux/amd64 .
 ```
-
+--no-cache
 * 04运行镜像
 ```shell
 #运行镜像后检查所有容器状态是否正常
-#sed -i "" 's/RAGFLOW_IMAGE=infiniflow\/ragflow:dev-slim/RAGFLOW_IMAGE=local.dsmm.com:1667\/dsmm\/ragflow:0.13.0/g' docker/.env
+#sed -i "" 's/RAGFLOW_IMAGE=infiniflow\/ragflow:dev-slim/RAGFLOW_IMAGE=local.dsxx.com:1667\/dsxx\/ragflow:0.13.0/g' 
+docker/.env
 docker compose -f docker/docker-compose.yml up -d
 ```
 
 * 05推送镜像到Harbor私服
 ```shell
-# 需要在daemon.json中配置"insecure-registries": ["http://local.dsmm.com:1667"]
-sudo docker login http://local.dsmm.com:1667 -u admin
-docker push local.dsmm.com:1667/dsmm/sentinel-dashboard:1.8.7
+# 需要在daemon.json中配置"insecure-registries": ["http://local.dsxx.com:1667"]
+sudo docker login http://local.dsxx.com:1667 -u admin
+docker push local.dsxx.com:1667/dsxx/sentinel-dashboard:1.8.7
 ```
 
 * 06其他说明
